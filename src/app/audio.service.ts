@@ -4,9 +4,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AudioService {
-  private context: AudioContext;
-  private buffers: Map<string, AudioBuffer> = new Map();
-  private currentSource: AudioBufferSourceNode | null = null;
+  private currentAudio: HTMLAudioElement | null = null;
+  private audioCache: Record<string, HTMLAudioElement> = {};
 
   private audioUrls = {
     startBgm: 'assets/audio/start_bgm.mp3',
@@ -20,55 +19,39 @@ export class AudioService {
   };
 
   constructor() {
-    this.context = new AudioContext();
-    this.preloadAll();
-  }
-
-  private async preloadAll() {
-    for (const [key, url] of Object.entries(this.audioUrls)) {
-      try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await this.context.decodeAudioData(arrayBuffer);
-        this.buffers.set(key, audioBuffer);
-      } catch (e) {
-        console.error(`Failed to preload ${key}:`, e);
-      }
-    }
+    // sadece hızlı efekt seslerini preload et
+    ['correctAnswer', 'wrongAnswer'].forEach((key) => {
+      const url = this.audioUrls[key as keyof typeof this.audioUrls];
+      const audio = new Audio(url);
+      audio.preload = 'auto';
+      this.audioCache[key] = audio;
+    });
   }
 
   play(audioKey: keyof typeof this.audioUrls, loop = false) {
     this.stop();
-    const buffer = this.buffers.get(audioKey);
-    if (!buffer) {
-      console.warn(`Audio buffer for ${audioKey} not ready yet`);
-      return;
-    }
 
-    const source = this.context.createBufferSource();
-    source.buffer = buffer;
-    source.loop = loop;
-    source.connect(this.context.destination);
-    source.start(0);
+    // cache'te varsa onu kullan, yoksa yeni Audio yarat
+    const audio =
+      this.audioCache[audioKey] || new Audio(this.audioUrls[audioKey]);
+    audio.loop = loop;
+    audio.currentTime = 0;
 
-    this.currentSource = source;
+    this.currentAudio = audio;
+    this.currentAudio
+      .play()
+      .catch((e) => console.error('Audio play error:', e));
   }
 
   stop() {
-    if (this.currentSource) {
-      this.currentSource.stop();
-      this.currentSource.disconnect();
-      this.currentSource = null;
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = null;
     }
   }
 
   playOnce(audioKey: keyof typeof this.audioUrls) {
     this.play(audioKey, false);
-  }
-
-  unlock() {
-    if (this.context.state === 'suspended') {
-      this.context.resume();
-    }
   }
 }
