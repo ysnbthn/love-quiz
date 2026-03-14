@@ -1,41 +1,47 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AudioService {
-  private currentAudio: HTMLAudioElement | null = null;
+  private audios: Record<string, HTMLAudioElement> = {};
 
   private audioUrls = {
-    startBgm: '/love-quiz/audio/start_bgm.mp3',
-    quizBgm: '/love-quiz/audio/quiz_bgm.mp3',
-    correctAnswer: '/love-quiz/audio/correct_answer.mp3',
-    wrongAnswer: '/love-quiz/audio/wrong_answer.mp3',
-    transitionMusic: '/love-quiz/audio/transition.mp3',
-    selectionMusic: '/love-quiz/audio/selection.mp3',
-    finishMusic: '/love-quiz/audio/finish.mp3',
-    finalQuizBgm: '/love-quiz/audio/final_quiz_bgm.mp3',
+    startBgm: 'assets/audio/start_bgm.mp3',
+    quizBgm: 'assets/audio/quiz_bgm.mp3',
+    correctAnswer: 'assets/audio/correct_answer.mp3',
+    wrongAnswer: 'assets/audio/wrong_answer.mp3',
+    transitionMusic: 'assets/audio/transition.mp3',
+    selectionMusic: 'assets/audio/selection.mp3',
+    finishMusic: 'assets/audio/finish.mp3',
+    finalQuizBgm: 'assets/audio/final_quiz_bgm.mp3',
   };
+
+  constructor() {
+    // preload
+    for (const [key, url] of Object.entries(this.audioUrls)) {
+      const audio = new Audio(url);
+      audio.preload = 'auto';
+      this.audios[key] = audio;
+    }
+  }
 
   play(audioKey: keyof typeof this.audioUrls, loop = false) {
     this.stop();
-    const url = this.audioUrls[audioKey];
-    this.currentAudio = new Audio(url);
-    this.currentAudio.loop = loop;
-    this.currentAudio
-      .play()
-      .catch((e) => console.error('Audio play error:', e));
+    const audio = this.audios[audioKey];
+    if (audio) {
+      audio.loop = loop;
+      audio.currentTime = 0;
+      audio.play().catch((e) => console.error('Audio play error:', e));
+    }
   }
 
   stop() {
     if (this.currentAudio) {
       this.currentAudio.pause();
       this.currentAudio.currentTime = 0;
-      this.currentAudio = null;
     }
   }
 
-  playOnce(audioKey: keyof typeof this.audioUrls) {
-    this.play(audioKey, false);
+  private get currentAudio(): HTMLAudioElement | null {
+    return Object.values(this.audios).find((a) => !a.paused) || null;
   }
 }
