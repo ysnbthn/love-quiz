@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class AudioService {
   private context: AudioContext;
+  private currentSource: AudioBufferSourceNode | null = null;
   private buffers: Map<string, AudioBuffer> = new Map();
 
   private audioUrls = {
@@ -33,14 +34,25 @@ export class AudioService {
   }
 
   play(audioKey: keyof typeof this.audioUrls, loop = false) {
+    this.stop();
     const buffer = this.buffers.get(audioKey);
     if (!buffer) return;
 
     const source = this.context.createBufferSource();
     source.buffer = buffer;
-    source.connect(this.context.destination);
     source.loop = loop;
+    source.connect(this.context.destination);
     source.start(0);
+
+    this.currentSource = source;
+  }
+
+  stop() {
+    if (this.currentSource) {
+      this.currentSource.stop();
+      this.currentSource.disconnect();
+      this.currentSource = null;
+    }
   }
 
   playOnce(audioKey: keyof typeof this.audioUrls) {
