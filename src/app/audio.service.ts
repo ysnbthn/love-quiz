@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class AudioService {
-  private audios: Record<string, HTMLAudioElement> = {};
+  private context: AudioContext;
+  private buffers: Map<string, AudioBuffer> = new Map();
 
   private audioUrls = {
     startBgm: 'assets/audio/start_bgm.mp3',
@@ -16,36 +19,38 @@ export class AudioService {
   };
 
   constructor() {
-    // preload
+    this.context = new AudioContext();
+    this.preloadAll();
+  }
+
+  private async preloadAll() {
     for (const [key, url] of Object.entries(this.audioUrls)) {
-      const audio = new Audio(url);
-      audio.preload = 'auto';
-      this.audios[key] = audio;
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await this.context.decodeAudioData(arrayBuffer);
+      this.buffers.set(key, audioBuffer);
     }
   }
 
   play(audioKey: keyof typeof this.audioUrls, loop = false) {
-    this.stop();
-    const audio = this.audios[audioKey];
-    if (audio) {
-      audio.loop = loop;
-      audio.currentTime = 0;
-      audio.play().catch((e) => console.error('Audio play error:', e));
-    }
-  }
+    const buffer = this.buffers.get(audioKey);
+    if (!buffer) return;
 
-  stop() {
-    if (this.currentAudio) {
-      this.currentAudio.pause();
-      this.currentAudio.currentTime = 0;
-    }
+    const source = this.context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(this.context.destination);
+    source.loop = loop;
+    source.start(0);
   }
 
   playOnce(audioKey: keyof typeof this.audioUrls) {
     this.play(audioKey, false);
   }
 
-  private get currentAudio(): HTMLAudioElement | null {
-    return Object.values(this.audios).find((a) => !a.paused) || null;
+  // mobil tarayıcılar için ilk dokunuşta context'i açmak gerekiyor
+  unlock() {
+    if (this.context.state === 'suspended') {
+      this.context.resume();
+    }
   }
 }
