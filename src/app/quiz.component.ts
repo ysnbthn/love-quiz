@@ -77,7 +77,7 @@ export class QuizComponent implements OnInit, OnDestroy {
     },
     {
       type: 'normal',
-      text: 'İlk Buluşma Günü ve saati?',
+      text: 'İlk Buluşma Günü ve saatimiz?',
       choices: [
         '21 Aralık 2025 13:05',
         '21 Aralık 2026 13:05',
@@ -89,7 +89,12 @@ export class QuizComponent implements OnInit, OnDestroy {
     {
       type: 'normal',
       text: 'Evine kargo ile gönderdiğim ilk hediye?',
-      choices: ['Kitap ayracı', 'Tirbüşon', '160cm Oyuncak Ayı', 'El Blenderı'],
+      choices: [
+        'Kitap ayracı',
+        'Kıyma Makinesi',
+        '160cm Oyuncak Ayı',
+        'İran Halısı',
+      ],
       correctAnswer: 2,
     },
     {
