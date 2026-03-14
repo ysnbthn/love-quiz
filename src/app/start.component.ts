@@ -20,7 +20,7 @@ export class StartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.audioService.play('startBgm', false);
-    this.isPlayingMusic = true;
+    this.isPlayingMusic = false;
   }
 
   ngOnDestroy() {
