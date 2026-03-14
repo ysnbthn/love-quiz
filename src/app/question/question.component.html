@@ -1,0 +1,35 @@
+<div class="question-text-box">
+  <div class="question-text">{{ text }}</div>
+
+  <!-- timed bar display -->
+  <div *ngIf="type === 'timed'" class="timer-bar">
+    <div
+      *ngFor="let bar of bars; let i = index"
+      class="bar"
+      [class.filled]="isFilled(i)"
+    ></div>
+  </div>
+
+  <!-- music question -->
+  <div *ngIf="type === 'music'" class="music-player">
+    <audio [src]="musicSrc" controls autoplay></audio>
+  </div>
+</div>
+
+<!-- choices (for any type) -->
+<div class="choices-container">
+  <ul class="choices">
+    <li
+      *ngFor="let c of choices; let i = index"
+      (click)="selectChoice(i)"
+      [class.selected]="selectedChoice === i && !showResult"
+      [class.correct]="showResult && i === correctAnswer"
+      [class.wrong]="showResult && selectedChoice === i && !isCorrect"
+      [class.blinking]="selectedChoice === i && showResult && isCorrect"
+      [class.blinking-wrong]="selectedChoice === i && showResult && !isCorrect"
+      [class.blinking-correct]="showResult && !isCorrect && i === correctAnswer"
+    >
+      {{ c }}
+    </li>
+  </ul>
+</div>

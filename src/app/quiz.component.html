@@ -1,0 +1,55 @@
+<div class="quiz-wrapper">
+  <!-- Finish Screen -->
+  <div *ngIf="isGameFinished" class="finish-screen">
+    <h1 class="finish-title">Tebrikler!</h1>
+    <p class="finish-kisses">500 Öpücük Kazandınız 💋</p>
+  </div>
+
+  <img src="/logo.png" alt="Logo" class="quiz-logo" />
+
+  <app-question
+    *ngIf="!isGameFinished && !showTransition"
+    [type]="current.type"
+    [text]="current.text"
+    [choices]="current.choices"
+    [musicSrc]="current.musicSrc || ''"
+    [correctAnswer]="current.correctAnswer"
+    [allCorrect]="current.allCorrect || false"
+    (answerSubmitted)="onAnswerSubmit($event)"
+  ></app-question>
+
+  <app-question-indicator
+    [currentIndex]="currentIndex"
+    [totalQuestions]="questions.length"
+    [kisses]="kisses"
+  ></app-question-indicator>
+
+  <!-- Action button - shows after answer and changes based on correct/wrong -->
+  <div class="button-container" *ngIf="!isGameFinished">
+    <button
+      *ngIf="
+        isAnswered &&
+        isAnswerCorrect &&
+        currentIndex < questions.length - 1 &&
+        showNextButton
+      "
+      class="next-button"
+      (click)="next()"
+    >
+      Sonraki
+    </button>
+    <button
+      *ngIf="isAnswered && !isAnswerCorrect && showNextButton"
+      class="next-button game-over"
+      (click)="next()"
+    >
+      Oyun Bitti - Ana Sayfaya Dön
+    </button>
+  </div>
+
+  <app-question-transition
+    *ngIf="showTransition && !isGameFinished"
+    [questionNumber]="currentIndex"
+    [totalQuestions]="questions.length"
+  ></app-question-transition>
+</div>

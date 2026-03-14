@@ -1,0 +1,10 @@
+<div class="start-container">
+  <button
+    class="music-button"
+    (click)="toggleMusic()"
+    [class.playing]="isPlayingMusic"
+  >
+    <span class="music-icon">♪</span>
+  </button>
+  <button class="start-button" (click)="beginQuiz()">BAŞLA</button>
+</div>

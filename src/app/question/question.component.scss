@@ -1,0 +1,254 @@
+.question-text-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+  background-color: #1e3a5f;
+  border: 3px solid #d4af37;
+  padding: 2rem;
+  border-radius: 8px;
+  position: fixed;
+  bottom: 18rem;
+  left: 2rem;
+  right: 2rem;
+  z-index: 10;
+}
+
+.question-text {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.choices-container {
+  position: fixed;
+  bottom: 9rem;
+  left: 2rem;
+  right: 2rem;
+
+  padding: 2rem;
+  border-radius: 8px;
+  z-index: 11;
+}
+
+.choices {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.choices li {
+  padding: 1rem;
+  border: 2px solid #d4af37;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #1e3a5f;
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s;
+  animation: slideIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Staggered animation delays for each choice */
+/* Question loads after transition, so animation starts immediately */
+.choices li:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.choices li:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.choices li:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.choices li:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.choices li:hover {
+  background-color: #2a5a8f;
+  box-shadow: 0 0 8px #d4af37;
+}
+
+.choices li.selected {
+  background-color: #d4af37;
+  color: #1e3a5f;
+  box-shadow:
+    0 0 12px #d4af37,
+    inset 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Result animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.choices li.blinking {
+  animation: blinking-result 0.8s 2 forwards;
+}
+
+.choices li.blinking-wrong {
+  animation: blinking-wrong 0.8s 2 forwards;
+}
+
+.choices li.blinking-correct {
+  animation: blinking-result 0.8s 2 forwards;
+}
+
+.choices li.correct {
+  background-color: #22c55e;
+  color: white;
+  border-color: #22c55e;
+  box-shadow: 0 0 12px #22c55e;
+  opacity: 1;
+}
+
+.choices li.wrong {
+  background-color: #ef4444;
+  color: white;
+  border-color: #ef4444;
+  box-shadow: 0 0 12px #ef4444;
+  opacity: 1;
+}
+
+@keyframes blinking-result {
+  0% {
+    background-color: #d4af37;
+    opacity: 1;
+  }
+  25% {
+    background-color: #22c55e;
+    opacity: 1;
+  }
+  50% {
+    background-color: #d4af37;
+    opacity: 1;
+  }
+  75% {
+    background-color: #22c55e;
+    opacity: 1;
+  }
+  100% {
+    background-color: #22c55e;
+    opacity: 1;
+  }
+}
+
+@keyframes blinking-wrong {
+  0% {
+    background-color: #d4af37;
+    opacity: 1;
+  }
+  25% {
+    background-color: #ef4444;
+    opacity: 1;
+  }
+  50% {
+    background-color: #d4af37;
+    opacity: 1;
+  }
+  75% {
+    background-color: #ef4444;
+    opacity: 1;
+  }
+  100% {
+    background-color: #ef4444;
+    opacity: 1;
+  }
+}
+
+.timer-bar {
+  display: flex;
+  gap: 1px;
+}
+
+.bar {
+  width: 6px;
+  height: 20px;
+  background: #e0e0e0;
+  transition: background 0.3s;
+}
+
+.bar.filled {
+  background: #ff6363;
+}
+
+.music-player audio {
+  width: 100%;
+  outline: none;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 500px) {
+  .question-text-box {
+    bottom: 16rem;
+    left: 1rem;
+    right: 1rem;
+    padding: 1rem;
+    border: 2px solid #d4af37;
+  }
+
+  .question-text {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .choices-container {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    padding: 1rem;
+  }
+
+  .choices {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .choices li {
+    padding: 0.75rem;
+    border: 2px solid #d4af37;
+    font-size: 0.95rem;
+    animation: slideIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  .choices li:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .choices li:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .choices li:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  .choices li:nth-child(4) {
+    animation-delay: 0.6s;
+  }
+
+  .timer-bar {
+    gap: 0.5px;
+  }
+
+  .bar {
+    width: 4px;
+    height: 15px;
+  }
+}

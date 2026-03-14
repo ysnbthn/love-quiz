@@ -1,0 +1,10 @@
+<div class="indicator-container">
+  <div
+    *ngFor="let num of getNumbers(); let i = index"
+    class="indicator-item"
+    [class.active]="i === currentIndex"
+  >
+    <div class="indicator-number">{{ i + 1 }}</div>
+    <div class="indicator-kisses">{{ getKisses(i) }} 💋</div>
+  </div>
+</div>
