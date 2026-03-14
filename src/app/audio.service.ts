@@ -41,6 +41,10 @@ export class AudioService {
     }
   }
 
+  playOnce(audioKey: keyof typeof this.audioUrls) {
+    this.play(audioKey, false);
+  }
+
   private get currentAudio(): HTMLAudioElement | null {
     return Object.values(this.audios).find((a) => !a.paused) || null;
   }
