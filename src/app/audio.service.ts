@@ -8,14 +8,14 @@ export class AudioService {
   private audioCache: Record<string, HTMLAudioElement> = {};
 
   private audioUrls = {
-    startBgm: 'assets/audio/start_bgm.mp3',
-    quizBgm: 'assets/audio/quiz_bgm.mp3',
-    correctAnswer: 'assets/audio/correct_answer.mp3',
-    wrongAnswer: 'assets/audio/wrong_answer.mp3',
-    transitionMusic: 'assets/audio/transition.mp3',
-    selectionMusic: 'assets/audio/selection.mp3',
-    finishMusic: 'assets/audio/finish.mp3',
-    finalQuizBgm: 'assets/audio/final_quiz_bgm.mp3',
+    startBgm: '/love-quiz/audio/start_bgm.mp3',
+    quizBgm: '/love-quiz/audio/quiz_bgm.mp3',
+    correctAnswer: '/love-quiz/audio/correct_answer.mp3',
+    wrongAnswer: '/love-quiz/audio/wrong_answer.mp3',
+    transitionMusic: '/love-quiz/audio/transition.mp3',
+    selectionMusic: '/love-quiz/audio/selection.mp3',
+    finishMusic: '/love-quiz/audio/finish.mp3',
+    finalQuizBgm: '/love-quiz/audio/final_quiz_bgm.mp3',
   };
 
   constructor() {
