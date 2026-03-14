@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class AudioService {
   private context: AudioContext;
-  private currentSource: AudioBufferSourceNode | null = null;
   private buffers: Map<string, AudioBuffer> = new Map();
+  private currentSource: AudioBufferSourceNode | null = null;
 
   private audioUrls = {
     startBgm: 'assets/audio/start_bgm.mp3',
@@ -26,17 +26,24 @@ export class AudioService {
 
   private async preloadAll() {
     for (const [key, url] of Object.entries(this.audioUrls)) {
-      const response = await fetch(url);
-      const arrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await this.context.decodeAudioData(arrayBuffer);
-      this.buffers.set(key, audioBuffer);
+      try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await this.context.decodeAudioData(arrayBuffer);
+        this.buffers.set(key, audioBuffer);
+      } catch (e) {
+        console.error(`Failed to preload ${key}:`, e);
+      }
     }
   }
 
   play(audioKey: keyof typeof this.audioUrls, loop = false) {
     this.stop();
     const buffer = this.buffers.get(audioKey);
-    if (!buffer) return;
+    if (!buffer) {
+      console.warn(`Audio buffer for ${audioKey} not ready yet`);
+      return;
+    }
 
     const source = this.context.createBufferSource();
     source.buffer = buffer;
@@ -59,7 +66,6 @@ export class AudioService {
     this.play(audioKey, false);
   }
 
-  // mobil tarayıcılar için ilk dokunuşta context'i açmak gerekiyor
   unlock() {
     if (this.context.state === 'suspended') {
       this.context.resume();
