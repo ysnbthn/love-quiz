@@ -146,7 +146,7 @@ export class QuizComponent implements OnInit, OnDestroy {
     this.transitionTimeout = setTimeout(() => {
       this.showTransition = false;
       this.audioService.play('quizBgm', true);
-    }, 2800);
+    }, 3200);
   }
 
   ngOnDestroy() {
@@ -157,6 +157,7 @@ export class QuizComponent implements OnInit, OnDestroy {
   }
 
   onAnswerSubmit(selectedIndex: number) {
+    let isLastQuestion = this.currentIndex === this.questions.length - 1;
     const current = this.current;
     this.isAnswered = true;
     // If allCorrect flag is true, any selection is correct
@@ -164,19 +165,22 @@ export class QuizComponent implements OnInit, OnDestroy {
       current.allCorrect || selectedIndex === current.correctAnswer;
 
     // Stop quiz background music and play selection music (3s)
-    this.audioService.stop();
-    this.audioService.playOnce('selectionMusic');
+    if (!isLastQuestion) {
+      this.audioService.stop();
+      this.audioService.playOnce('selectionMusic');
+    }
 
     // After 3 seconds, play correct/wrong sound
     setTimeout(() => {
       if (this.isAnswerCorrect) {
-        this.audioService.playOnce('correctAnswer');
+        if (!isLastQuestion) {
+          this.audioService.playOnce('correctAnswer');
+        }
 
-        // If this is last question and correct, auto-trigger finish screen after 3 more seconds
         if (this.currentIndex === this.questions.length - 1) {
           this.transitionTimeout = setTimeout(() => {
             this.next();
-          }, 2800);
+          }, 3200);
         } else {
           this.showNextButton = true;
         }
@@ -184,7 +188,7 @@ export class QuizComponent implements OnInit, OnDestroy {
         this.audioService.playOnce('wrongAnswer');
         this.showNextButton = true;
       }
-    }, 2800);
+    }, 3200);
   }
 
   next() {
@@ -199,8 +203,8 @@ export class QuizComponent implements OnInit, OnDestroy {
     if (this.currentIndex === this.questions.length - 1) {
       // Show finish screen
       this.isGameFinished = true;
-      this.audioService.stop();
-      this.audioService.playOnce('finishMusic');
+      //this.audioService.stop();
+      //this.audioService.playOnce('finishMusic');
 
       // After 10 seconds, go back to start
       this.transitionTimeout = setTimeout(() => {
