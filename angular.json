@@ -82,7 +82,8 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "src/assets"
+              "src/assets",
+              "src/public"
             ],
             "styles": ["src/styles.scss"],
             "scripts": []
