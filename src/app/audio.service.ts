@@ -7,14 +7,14 @@ export class AudioService {
   private currentAudio: HTMLAudioElement | null = null;
 
   private audioUrls = {
-    startBgm: '/audio/start_bgm.mp3',
-    quizBgm: '/audio/quiz_bgm.mp3',
-    correctAnswer: '/audio/correct_answer.mp3',
-    wrongAnswer: '/audio/wrong_answer.mp3',
-    transitionMusic: '/audio/transition.mp3',
-    selectionMusic: '/audio/selection.mp3',
-    finishMusic: '/audio/finish.mp3',
-    finalQuizBgm: '/audio/final_quiz_bgm.mp3',
+    startBgm: 'audio/start_bgm.mp3',
+    quizBgm: 'audio/quiz_bgm.mp3',
+    correctAnswer: 'audio/correct_answer.mp3',
+    wrongAnswer: 'audio/wrong_answer.mp3',
+    transitionMusic: 'audio/transition.mp3',
+    selectionMusic: 'audio/selection.mp3',
+    finishMusic: 'audio/finish.mp3',
+    finalQuizBgm: 'audio/final_quiz_bgm.mp3',
   };
 
   play(audioKey: keyof typeof this.audioUrls, loop = false) {

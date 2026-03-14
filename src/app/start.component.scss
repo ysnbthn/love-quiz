@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("/bg_desktop.png");
+  background-image: url("bg_desktop.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100% 100%; /* Stretch */
@@ -92,7 +92,7 @@
 /* Mobile Responsiveness */
 @media (max-width: 500px) {
   .start-container {
-    background-image: url("/bg_mobile.png");
+    background-image: url("bg_mobile.png");
   }
 
   .start-button {
