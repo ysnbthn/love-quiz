@@ -97,7 +97,7 @@ export class QuestionComponent implements OnInit, OnDestroy, OnChanges {
       // For allCorrect questions, any selection is correct (green blinking)
       this.isCorrect = this.allCorrect || index === this.correctAnswer;
       this.showResult = true;
-    }, 3200);
+    }, 2800);
   }
 
   reset() {

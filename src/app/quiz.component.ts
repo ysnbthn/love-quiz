@@ -146,7 +146,7 @@ export class QuizComponent implements OnInit, OnDestroy {
     this.transitionTimeout = setTimeout(() => {
       this.showTransition = false;
       this.audioService.play('quizBgm', true);
-    }, 3200);
+    }, 2800);
   }
 
   ngOnDestroy() {
@@ -176,7 +176,7 @@ export class QuizComponent implements OnInit, OnDestroy {
         if (this.currentIndex === this.questions.length - 1) {
           this.transitionTimeout = setTimeout(() => {
             this.next();
-          }, 3000);
+          }, 2800);
         } else {
           this.showNextButton = true;
         }
@@ -184,7 +184,7 @@ export class QuizComponent implements OnInit, OnDestroy {
         this.audioService.playOnce('wrongAnswer');
         this.showNextButton = true;
       }
-    }, 3200);
+    }, 2800);
   }
 
   next() {
